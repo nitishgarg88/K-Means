@@ -1,0 +1,60 @@
+class Kmeans:
+    def __init__(self):
+        return;
+
+    # Add your code here.
+    # Return the centroids of clusters.
+    # You must use [(30, 30), (150, 30), (90, 130)] as initial centroids
+    def solve(self, points):
+        centroids = [(30, 30), (150, 30), (90, 130)];
+        
+        "creating list of number of clusters"
+        myListOfLists = []
+        prevCentroids = []
+        for i in range(len(centroids)):
+            myListOfLists.append([])
+             
+        noIterations=0   
+        while (centroids != prevCentroids):
+            noIterations+=1
+            for point in points:
+                myListOfLists[self.assignment(point,centroids)].append(point);
+            prevCentroids=centroids
+            
+            "update the centroids"
+            newCentroids=[]
+            for i in range(len(centroids)):   
+                newCentroids.append(self.calculateCentroid(myListOfLists[i]))  
+            centroids=newCentroids
+
+            myListOfLists[:] = []
+            for i in range(len(centroids)):
+                myListOfLists.append([])
+            
+        return centroids;
+    
+    "returns the group number assigned to the point"
+    def assignment(self,point,centroids):
+        groupNo=0
+        minDistance= float("inf")#self.calculateDistance(point,centroids[0])
+        for i in range(len(centroids)):
+            distance=self.calculateDistance(point,centroids[i])
+            if distance < minDistance:
+                minDistance=distance
+                groupNo=i
+                #print groupNo
+        return groupNo
+    
+    def calculateDistance(self,point1,point2):
+        return (point1[0]-point2[0])*(point1[0]-point2[0]) + (point1[1]-point2[1])*(point1[1]-point2[1])
+    
+    def calculateCentroid(self,myList):
+        xTotal=0
+        yTotal=0
+        for i in range(len(myList)):
+            xTotal=xTotal+myList[i][0]
+            yTotal=yTotal+myList[i][1]
+        #print xTotal,len(myList) 
+        xMean=(float(xTotal))/len(myList)
+        yMean=(float(yTotal))/len(myList)
+        return (xMean,yMean)
